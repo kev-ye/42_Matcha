@@ -1,6 +1,81 @@
-Front: reactJs
-Back: Python Flask
+[//]: # (Data begin: 31/05/2022)
+
+Front: reactJs  
+Back: Python Flask  
 DB: postgresql
+
+* Model:
+> Global:
+>> user { // database struct  
+    id: int           -> primary key autoincrement  
+    name: str         -> required & editable  
+    fname: str        -> required & editable  
+    birthday: date    -> optional & editable  
+    sex: str          -> optional & editable  
+    sex_o: str        -> optional & editable  
+    tag_l: [str]      -> optional & editable  
+    username: str     -> required & unique  
+    password: str     -> required & editable  
+    email: str        -> required & editable  
+    location: str     -> optional & editable  
+    bio: str          -> optional & editable  
+    online: bool      -> optional  
+    like_l: [str]     -> optional  
+    consult_l: [str]  -> optional  
+    black_l: [str]    -> optional  
+    reported_l: [str] -> optional  
+    image_l: [str]    -> optional  
+  }  
+
+> Auth:
+>> payload { // response struct   
+    id: int  
+    username: str  
+  }  
+
+> Profile:
+>> profile {
+    coming soon ...  
+  }  
+
+> Match:
+match {
+  coming soon ...
+}
+
+> Chat:
+chat {
+  coming soon ...
+}
+
+> Notifications:
+Notify {
+  coming soon ...
+}
+
+* Routes - back:
+> Authentication
+>> - sign in       -> Post
+>> - sign out      -> Post
+>> - sign up       -> Post
+
+> Profile
+>> - get user      -> Get -> auth
+>> - get like      -> Get -> auth
+>> - get consult   -> Get -> auth
+>> - get image     -> Get/Put -> auth
+>> - update user   -> Put -> auth
+>> - update user   -> Put -> no auth (use params?)
+
+> Match / Research
+>> - get suggest l -> Get -> auth
+>> - get result l  -> Get -> auth
+
+> Chat
+>> - coming soon ...
+
+> Notifications
+>> - coming soon ...
 
 - [ ] Sign up / in / out
   * Sign up:

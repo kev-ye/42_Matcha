@@ -4,6 +4,8 @@
 
 back-end/venv/
 
+back-end/.flaskenv
+
 back-end/*.pyc
 back-end/__pycache__/
 
