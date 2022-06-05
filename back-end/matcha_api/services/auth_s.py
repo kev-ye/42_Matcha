@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
+from psycopg2.extras import RealDictCursor
 
-from flask import g, request, make_response
-from flask_restful import inputs
+from flask import request
 from flask_jwt_extended import (
 	create_access_token,
 	get_jwt,
@@ -13,6 +13,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from matcha_api.db import get_db
 from matcha_api.common.validator import data_validator as validator
+from matcha_api.common.utils import msg_response
 
 
 # refresh jwt token
@@ -37,7 +38,7 @@ def refresh_expiring_jwt(response):
 # sign up logic
 def handle_signup():
 	data = request.get_json(force=True, silent=True)
-	response = make_response({"msg": "signup failed"}, 400)
+	response = msg_response('signup failed', 400)
 
 	def __insert_data(obj):
 		try:
@@ -54,7 +55,7 @@ def handle_signup():
 
 	try:
 		if _check_data(data) is True and __insert_data(data) is True:
-			response = make_response({"msg": "signup success"}, 200)
+			response = msg_response('signup success', 200)
 	except KeyError as e:
 		print('Exception:', e)
 		return response
@@ -62,29 +63,38 @@ def handle_signup():
 	return response
 
 
+# dev test
+def handle_signin_dev():
+	response = msg_response('signin success', 200)
+	access_token = create_access_token(identity={"id": "4", "username": "username"})
+	set_access_cookies(response, access_token)
+	return response
+
+
 # sign in logic
 def handle_signin():
 	data = request.get_json(force=True, silent=True)
-	response = make_response({"msg": "signin failed"}, 400)
+	response = msg_response('signin failed', 400)
 
 	def __authentication(obj):
 		try:
-			with get_db() as db, db.cursor() as cursor:
-				user = cursor.execute(
+			with get_db() as db, db.cursor(cursor_factory=RealDictCursor) as cursor:
+				cursor.execute(
 					'SELECT * FROM users WHERE username = %s', (data['username'],)
-				).fetchone()
+				)
+				user = cursor.fetchone()
 
 				if user is None:
-					return make_response({"msg": "incorrect username"}, 400)
+					return msg_response('username invalid', 400)
 				elif not check_password_hash(user['password'], obj['password']):
-					return make_response({"msg": "incorrect password"}, 400)
+					return msg_response('password invalid', 400)
 
 				access_token = create_access_token(identity={"id": user['id'], "username": user['username']})
 				set_access_cookies(response, access_token)
-				return make_response({"msg": "signin success"}, 200)
+				return msg_response('msg": "signin success', 200)
 		except (AttributeError, db.IntegrityError) as er:
 			print('debug:', er)
-			return False
+			return msg_response('signin failed', 400)
 
 	try:
 		if _check_data(data) is True:
@@ -97,7 +107,7 @@ def handle_signin():
 
 # sign out logic
 def handle_signout():
-	response = make_response({"msg": "signout successful"}, 200)
+	response = msg_response('signout successful', 200)
 	unset_jwt_cookies(response)
 	return response
 

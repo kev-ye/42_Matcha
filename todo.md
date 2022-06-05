@@ -28,15 +28,14 @@ DB: postgresql
   }  
 
 > Auth:
->> payload { // response struct   
-    id: int  
-    username: str  
-  }  
+> post: sign up
+> post: sign in
+> get: sign out
+> payload {id + username}
 
 > Profile:
->> profile {
-    coming soon ...  
-  }  
+> get & post: userinfo
+> payload {bd, sex, sex_o, bio, tag, pic, email, password, fname, name, username, location}
 
 > Match:
 match {
@@ -78,6 +77,7 @@ Notify {
 >> - coming soon ...
 
 - [ ] Sign up / in / out
+  - [ ] pattern front & back
   * Sign up:
     - [ ] email
     - [ ] username

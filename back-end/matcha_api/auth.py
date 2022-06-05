@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_jwt_extended import jwt_required
-from flask_restful import Api, Resource, fields, marshal_with
+from flask_restful import Api, Resource
 
 import matcha_api.services.auth_s as service
 
@@ -15,9 +15,10 @@ class SignUp(Resource):
 
 
 class SignIn(Resource):
+	# change to get later
 	# noinspection PyMethodMayBeStatic
-	def post(self):
-		return service.handle_signin()
+	def get(self):
+		return service.handle_signin_dev()
 
 
 class SignOut(Resource):

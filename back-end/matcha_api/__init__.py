@@ -5,7 +5,7 @@ from datetime import timedelta
 from flask_jwt_extended import JWTManager
 
 from matcha_api.services.auth_s import refresh_expiring_jwt
-from matcha_api import db, auth
+from matcha_api import db, auth, profile
 
 
 def create_app():
@@ -27,5 +27,6 @@ def create_app():
 
 	# blueprint
 	app.register_blueprint(auth.auth_bp)
+	app.register_blueprint(profile.profile_bp)
 
 	return app
