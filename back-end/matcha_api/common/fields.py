@@ -1,6 +1,7 @@
 from flask_restful import fields
 
 
+# should be consulted by self or username
 userinfo_limit = {
 	"username": fields.String(),
 	"name": fields.String(),
@@ -16,15 +17,18 @@ userinfo_limit = {
 	"image_l": fields.List(fields.String())
 }
 
+# should be consulted by self
 userinfo_history = {
 	"like_l": fields.List(fields.String()),
 	"consult_l": fields.List(fields.String())
 }
 
+# should be consulted by self
 userinfo_black_list = {
 	"black_l": fields.List(fields.String())
 }
 
+# should be consulted by username
 userinfo_reported_list = {
 	"reported_l": fields.List(fields.String())
 }

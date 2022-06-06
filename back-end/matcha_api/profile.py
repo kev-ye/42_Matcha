@@ -18,4 +18,11 @@ class Profile(Resource):
 		pass
 
 
+class ProfileParams(Resource):
+	@jwt_required()
+	def get(self, param):
+		return service.get_user_info_params(param)
+
+
 api.add_resource(Profile, '/profile')
+api.add_resource(ProfileParams, '/profile/<param>')

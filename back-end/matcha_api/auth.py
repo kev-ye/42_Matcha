@@ -15,10 +15,9 @@ class SignUp(Resource):
 
 
 class SignIn(Resource):
-	# change to get later
 	# noinspection PyMethodMayBeStatic
-	def get(self):
-		return service.handle_signin_dev()
+	def post(self):
+		return service.handle_signin()
 
 
 class SignOut(Resource):

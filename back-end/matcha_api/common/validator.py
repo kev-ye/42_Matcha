@@ -1,4 +1,4 @@
-data_validator = {
+_validator = {
 	'name': lambda name: True if name is not None else False,
 	'fname': lambda fname: True if fname is not None else False,
 	'birthday': lambda bd: True if bd is not None else False,
@@ -11,3 +11,12 @@ data_validator = {
 	'location': lambda location: True if location is not None else False,
 	'bio': lambda bio: True if bio is not None else False
 }
+
+
+def data_validator(obj):
+	if obj is None:
+		return False
+	for k, v in obj.items():
+		if v is None or _validator[k](v) is False:
+			return False
+	return True
