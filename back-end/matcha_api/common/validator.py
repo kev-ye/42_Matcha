@@ -13,10 +13,17 @@ _validator = {
 }
 
 
-def data_validator(obj):
-	if obj is None:
+def data_validator(obj: dict):
+	"""Data validator
+
+	Return 'True' if all input value is correct otherwise return 'False'
+
+	:param obj: key/value object
+	"""
+	if obj is None or type(obj) is not dict:
 		return False
+
 	for k, v in obj.items():
-		if v is None or _validator[k](v) is False:
+		if k not in _validator or v is None or _validator[k](v) is False:
 			return False
 	return True

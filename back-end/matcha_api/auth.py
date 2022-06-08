@@ -20,12 +20,12 @@ class SignIn(Resource):
 		return service.handle_signin()
 
 
-class SignOut(Resource):
-	@jwt_required()
-	def get(self):
-		return service.handle_signout()
+class RefreshToken(Resource):
+	@jwt_required(refresh=True)
+	def post(self):
+		return service.handle_refresh()
 
 
 api.add_resource(SignUp, '/signup')
 api.add_resource(SignIn, '/signin')
-api.add_resource(SignOut, '/signout')
+api.add_resource(RefreshToken, '/refresh')

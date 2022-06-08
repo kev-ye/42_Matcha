@@ -15,7 +15,7 @@ class Profile(Resource):
 
 	@jwt_required()
 	def post(self):
-		pass
+		return service.update_user_info()
 
 
 class ProfileParams(Resource):
