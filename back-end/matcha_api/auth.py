@@ -26,6 +26,13 @@ class RefreshToken(Resource):
 		return service.handle_refresh()
 
 
+class IsLogin(Resource):
+	@jwt_required()
+	def get(self):
+		return service.handle_is_login()
+
+
 api.add_resource(SignUp, '/signup')
 api.add_resource(SignIn, '/signin')
+api.add_resource(IsLogin, '/islogin')
 api.add_resource(RefreshToken, '/refresh')

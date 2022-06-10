@@ -19,13 +19,15 @@ def handle_signup():
 	data = request.get_json(force=True, silent=True)
 	response = msg_response('signup failed', 400)
 
-	return msg_response('signup success', 200)\
+	return msg_response('signup success', 200) \
 		if insert_one('users', data) is True else response
 
 
 # post: sign in logic
 def handle_signin():
 	data = request.get_json(force=True, silent=True)
+
+	print('???:', data)
 
 	user = find_one('users', 'username', data['username'])
 
@@ -46,6 +48,11 @@ def handle_signin():
 		"access_token": access_token,
 		"refresh_token": refresh_token
 	}
+
+
+# get: check if is login
+def handle_is_login():
+	return True
 
 
 # post: refresh token

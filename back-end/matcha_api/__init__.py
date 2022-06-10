@@ -5,10 +5,13 @@ from datetime import timedelta
 from flask_jwt_extended import JWTManager
 
 from matcha_api import db, auth, profile
+from flask_cors import CORS
 
 
 def create_app():
 	app = Flask(__name__)
+	CORS(app)
+
 	app.config.from_mapping(
 		JWT_COOKIE_SECURE=False,
 		JWT_SECRET_KEY=os.environ['JWT_SECRET_KEY'],
