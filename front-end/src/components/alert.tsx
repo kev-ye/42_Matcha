@@ -26,7 +26,7 @@ export function TransitionAlert(props: { type: AlertColor, msg: string, open: bo
               <CloseIcon fontSize="inherit" />
             </IconButton>
           }
-          sx={{ mb: 2, marginTop: 64 }}
+          sx={{ mb: 2, marginTop: '64px'}}
         >
           {msg}
         </Alert>
