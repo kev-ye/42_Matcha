@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,9 +13,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import {ApiAuth} from "../../global/global";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 import {UserContext} from "../../utils/context";
 import {getCurrentUser} from "../../utils/api";
+import {TransitionAlert as Alert} from "../../components/alert";
+
 
 const auth = async (data: any, f: Function) => {
   const url = `${ApiAuth}/signin`
@@ -24,14 +27,14 @@ const auth = async (data: any, f: Function) => {
     headers: { "Content-Type": "application/json" }
   })
 
-  if (res.status != 200) return
+  if (res.status != 200) return false
   else {
     const data = await res.json()
 
     localStorage.setItem('__access_token__', data.access_token)
     localStorage.setItem('__refresh_token__', data.refresh_token)
 
-    await getCurrentUser(f)
+    return await getCurrentUser(f)
   }
 }
 
@@ -52,23 +55,24 @@ const theme = createTheme();
 
 export default function SignIn() {
   const { setUser } = useContext(UserContext)
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [open, setOpen] = useState(false)
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log('form data:', {
-      username: data.get('username'),
-      password: data.get('password'),
-    });
     const identity = {
       username: data.get('username'),
       password: data.get('password')
     }
 
-    auth(identity, setUser).then()
+    if  (!(await auth(identity, setUser)))
+      setOpen(true)
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <Alert type='error' msg='Invalid username/password' open={open} f={setOpen} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

@@ -32,9 +32,9 @@ def handle_signin():
 	user = find_one('users', 'username', data['username'])
 
 	if user is None:
-		return msg_response('username invalid', 400)
+		return msg_response('username invalid', 401)
 	elif not check_password_hash(user['password'], data['password']):
-		return msg_response('password invalid', 400)
+		return msg_response('password invalid', 401)
 
 	access_token = create_access_token(identity={
 		"id": user['id'],

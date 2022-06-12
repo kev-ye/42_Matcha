@@ -5,15 +5,15 @@ import {
 	Route,
 } from 'react-router-dom';
 
-import Nav from "../app/nav/nav";
-import Signin from "../app/signin/signin";
-import Signup from "../app/signup/signup"
-import App from "../app/app";
-import {UserContext} from "../utils/context";
-import {getCurrentUser} from "../utils/api";
+import Nav from "./app/nav/nav";
+import Signin from "./app/signin/signin";
+import Signup from "./app/signup/signup"
+import App from "./app/app";
+import {UserContext} from "./utils/context";
+import {getCurrentUser} from "./utils/api";
 
 const RouterAfterAuth = () => {
-	const { user, setUser } = useContext(UserContext)
+	const { user } = useContext(UserContext)
 
 	return user === null
 		? (
@@ -37,7 +37,6 @@ const AppRouter = () => {
 	const value = useMemo(() => ({user, setUser}), [user, setUser])
 
 	useEffect(() => {
-		console.log('test')
 		getCurrentUser(setUser).then()
 	}, [])
 

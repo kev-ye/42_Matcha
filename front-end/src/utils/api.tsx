@@ -5,7 +5,7 @@ export const getCurrentUser = async (f: Function) => {
 
 	if (token === null) {
 		f(null)
-		return
+		return false
 	}
 
 	const url = `${ApiProfile}/profile`
@@ -14,10 +14,14 @@ export const getCurrentUser = async (f: Function) => {
 		method: 'get',
 		headers
 	})
+
 	const data = await res.json()
 
-	if (res.status !== 200)
+	if (res.status !== 200) {
 		f(null)
-	else
+		return true
+	} else {
 		f(data)
+		return true
+	}
 }
