@@ -10,8 +10,25 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {ApiAuth} from "../../global/global";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-function Copyright(props: any) {
+// function: subscription
+const subscription = async (data: any) => {
+  const url = `${ApiAuth}/signup`
+  const res = await fetch(url, {
+    method: 'post',
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" }
+  })
+
+  if (res.status === 401) return res.json()
+  return null
+}
+
+// component: copyright
+const Copyright = (props: any) => {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -26,14 +43,30 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+// component: sign up (main)
+const SignUp = () => {
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const [msg, setMsg] = useState('Invalid input!')
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
+    const identity = {
+      name: data.get('lastName'),
+      fname: data.get('firstName'),
+      username: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
-    });
+    }
+
+    const msg = await subscription(identity)
+    if (msg) {
+      setOpen(true)
+      setMsg(msg.msg)
+    }
+    else navigate('/signin')
   };
 
   return (
@@ -81,6 +114,16 @@ export default function SignUp() {
                 <TextField
                   required
                   fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
@@ -121,3 +164,5 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+
+export default SignUp

@@ -14,11 +14,13 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import {ApiAuth} from "../../global/global";
 import {useContext, useState} from "react";
-import {UserContext} from "../../utils/context";
+import {useNavigate} from "react-router-dom";
+import {AlertContext, UserContext} from "../../utils/context";
 import {getCurrentUser} from "../../utils/api";
 import {TransitionAlert as Alert} from "../../components/alert";
 
 
+// function: authenticate
 const auth = async (data: any, f: Function) => {
   const url = `${ApiAuth}/signin`
   const res = await fetch(url, {
@@ -34,17 +36,20 @@ const auth = async (data: any, f: Function) => {
     localStorage.setItem('__access_token__', data.access_token)
     localStorage.setItem('__refresh_token__', data.refresh_token)
 
-    return await getCurrentUser(f)
+    const user = await getCurrentUser()
+    f(user)
+    return user
   }
 }
 
+
+// component: copyright
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="http://localhost:3000/">
-        Matcha
-      </Link>{' '}
+      <Link color="inherit" href="http://localhost:3000/">Matcha</Link>
+      {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -53,9 +58,12 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+// component: sign in (main)
+const SignIn = () => {
   const { setUser } = useContext(UserContext)
+  const { alert, setAlert } = useContext(AlertContext)
   const [open, setOpen] = useState(false)
+  const navigate = useNavigate()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -66,13 +74,21 @@ export default function SignIn() {
       password: data.get('password')
     }
 
-    if  (!(await auth(identity, setUser)))
+    const user = await auth(identity, setUser)
+
+    if (user === null) {
       setOpen(true)
+      setAlert('Username or Password invalid')
+    }
+    else {
+      setAlert(`Welcome ${user.username} !`)
+      navigate('/')
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Alert type='error' msg='Invalid username/password' open={open} f={setOpen} />
+      <Alert type='error' msg={alert} open={open} f={setOpen} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -137,3 +153,5 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+
+export default SignIn

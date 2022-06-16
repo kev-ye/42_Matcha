@@ -5,14 +5,15 @@ import {
 	Route,
 } from 'react-router-dom';
 
-import Nav from "./app/nav/nav";
+import ToolBar from "./app/toolbar/toolbar";
 import Signin from "./app/signin/signin";
 import Signup from "./app/signup/signup"
 import App from "./app/app";
-import {UserContext} from "./utils/context";
-import {getCurrentUser} from "./utils/api";
+import {AlertContext, UserContext} from "./utils/context";
+import {setCurrentUser} from "./utils/api";
 
-const RouterAfterAuth = () => {
+//
+const RouterStat = () => {
 	const { user } = useContext(UserContext)
 
 	return user === null
@@ -34,17 +35,22 @@ const RouterAfterAuth = () => {
 
 const AppRouter = () => {
 	const [user, setUser] = useState(null)
-	const value = useMemo(() => ({user, setUser}), [user, setUser])
+	const userValue = useMemo(() => ({user, setUser}), [user, setUser])
+
+	const [alert, setAlert] = useState(null)
+	const alertValue = useMemo(() => ({alert, setAlert}), [alert, setAlert])
 
 	useEffect(() => {
-		getCurrentUser(setUser).then()
+		setCurrentUser(setUser).then()
 	}, [])
 
 	return (
 			<BrowserRouter>
-				<UserContext.Provider value={value}>
-					<Nav />
-					<RouterAfterAuth />
+				<UserContext.Provider value={userValue}>
+					<AlertContext.Provider value={alertValue}>
+						<ToolBar />
+						<RouterStat />
+					</AlertContext.Provider>
 				</UserContext.Provider>
 			</BrowserRouter>
 		)

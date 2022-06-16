@@ -1,4 +1,5 @@
 import * as React from "react";
+import {Link as RouterLink} from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
@@ -10,8 +11,9 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import {Link as RouterLink} from "react-router-dom";
 import Button from "@mui/material/Button";
+import {SvgIcon} from "@mui/material";
+import {Si42} from 'react-icons/si';
 
 const pages = [{
   name: 'Sign in',
@@ -20,6 +22,14 @@ const pages = [{
   name: 'Sign up',
   path: 'signup'
 }]
+
+const FortyTwoIcon = (props: any) => {
+  return (
+    <SvgIcon {...props}>
+      <Si42 />
+    </SvgIcon>
+  )
+}
 
 const NavLoggedOut = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -36,7 +46,7 @@ const NavLoggedOut = () => {
     <AppBar position="fixed">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <FortyTwoIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -96,7 +106,7 @@ const NavLoggedOut = () => {
             </Menu>
           </Box>
 
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <FortyTwoIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap

@@ -17,7 +17,10 @@ from matcha_api.common.database import insert_one, find_one
 # post: sign up logic
 def handle_signup():
 	data = request.get_json(force=True, silent=True)
-	response = msg_response('signup failed', 400)
+	response = msg_response('signup failed', 401)
+
+	if find_one('users', 'username', ['username']) is not None:
+		return msg_response('Username already use', 401)
 
 	return msg_response('signup success', 200) \
 		if insert_one('users', data) is True else response
@@ -26,8 +29,6 @@ def handle_signup():
 # post: sign in logic
 def handle_signin():
 	data = request.get_json(force=True, silent=True)
-
-	print('???:', data)
 
 	user = find_one('users', 'username', data['username'])
 

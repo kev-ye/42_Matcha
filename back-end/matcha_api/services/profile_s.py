@@ -18,9 +18,6 @@ from matcha_api.common.database import find_one, update_one
 def get_user_info():
 	identity, data = _common_data()
 
-	print('iden in get user:', identity)
-	print('data in get user:', data)
-
 	if data is None:
 		return _result(
 			identity['username'] if 'username' in identity else None,

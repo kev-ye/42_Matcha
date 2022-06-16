@@ -4,10 +4,10 @@ import {UserContext} from "../../utils/context";
 import NavLoggedOut from "./components/navLoggedOut";
 import NavLoggedIn from "./components/navLoggedIn";
 
-const Nav = () => {
+const ToolBar = () => {
 	const { user } = React.useContext(UserContext)
 
 	return user === null ? <NavLoggedOut /> : <NavLoggedIn />
 }
 
-export default Nav
+export default ToolBar
