@@ -5,14 +5,21 @@ import {
 	Route,
 } from 'react-router-dom';
 
+import {AlertContext, UserContext} from "./utils/context";
+import {setCurrentUser} from "./utils/api";
+
 import ToolBar from "./app/toolbar/toolbar";
 import Signin from "./app/signin/signin";
 import Signup from "./app/signup/signup"
 import App from "./app/app";
-import {AlertContext, UserContext} from "./utils/context";
-import {setCurrentUser} from "./utils/api";
+import Profile from "./app/profile/profile";
+import Setting from "./app/setting/setting";
+import Chat from "./app/chat/chat";
+import Finda from "./app/finda/finda";
+import Matcha from "./app/matcha/matcha";
+import Collection from "./app/collection/collection";
 
-//
+// router stats (stat logged in and logged out)
 const RouterStat = () => {
 	const { user } = useContext(UserContext)
 
@@ -28,6 +35,13 @@ const RouterStat = () => {
 		: (
 				<Routes>
 					<Route path='/' element={<App />}/>
+					<Route path='/index' element={<App />}/>
+					<Route path='/collection' element={<Collection />}/>
+					<Route path='/profile' element={<Profile />}/>
+					<Route path='/setting' element={<Setting />}/>
+					<Route path='/chat' element={<Chat />}/>
+					<Route path='/matcha' element={<Matcha />}/>
+					<Route path='/finda' element={<Finda />}/>
 					<Route path='*' element={<App />}/>
 				</Routes>
 		)

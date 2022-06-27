@@ -1,10 +1,9 @@
 import * as React from "react";
-import {Link as RouterLink} from "react-router-dom";
+import {Link as RouterLink, useNavigate} from "react-router-dom";
 
 import AppBar from "@mui/material/AppBar";
 import Container from "@mui/material/Container";
 import Toolbar from "@mui/material/Toolbar";
-import AdbIcon from "@mui/icons-material/Adb";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
@@ -14,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import {SvgIcon} from "@mui/material";
 import {Si42} from 'react-icons/si';
+import {FortyTwoIcon} from "../../components/logo";
 
 const pages = [{
   name: 'Sign in',
@@ -22,14 +22,6 @@ const pages = [{
   name: 'Sign up',
   path: 'signup'
 }]
-
-const FortyTwoIcon = (props: any) => {
-  return (
-    <SvgIcon {...props}>
-      <Si42 />
-    </SvgIcon>
-  )
-}
 
 const NavLoggedOut = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -42,11 +34,19 @@ const NavLoggedOut = () => {
     setAnchorElNav(null);
   };
 
+  const navigate = useNavigate()
+
+  const toIndex = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault()
+
+    navigate('/')
+  }
+
   return (
     <AppBar position="fixed">
-      <Container maxWidth="xl">
+      <Container sx={{ backgroundColor: '#c5d5cb' }} maxWidth="xl">
         <Toolbar disableGutters>
-          <FortyTwoIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <FortyTwoIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} cursor="pointer" onClick={toIndex} />
           <Typography
             variant="h6"
             noWrap
@@ -61,6 +61,7 @@ const NavLoggedOut = () => {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            onClick={toIndex}
           >
             Matcha
           </Typography>
@@ -95,18 +96,18 @@ const NavLoggedOut = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.name} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <RouterLink to={page.path} style={{ textDecoration: 'none', color: 'black' }}>
-                      {page.name}
-                    </RouterLink>
-                  </Typography>
-                </MenuItem>
+                <RouterLink key={page.name} to={page.path} style={{ textDecoration: 'none', color: 'black' }}>
+                  <MenuItem onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">
+                        {page.name}
+                    </Typography>
+                  </MenuItem>
+                </RouterLink>
               ))}
             </Menu>
           </Box>
 
-          <FortyTwoIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <FortyTwoIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} cursor="pointer" onClick={toIndex} />
           <Typography
             variant="h5"
             noWrap
@@ -122,21 +123,21 @@ const NavLoggedOut = () => {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            onClick={toIndex}
           >
             Matcha
           </Typography>
 
           <Box sx={{flexGrow: 1, display: { xs: 'none', md: 'flex' }, mr: 1}}>
             {pages.map((page) => (
-              <Button
-                key={page.name}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                <RouterLink to={page.path} style={{ textDecoration: 'none', color: 'white' }}>
-                  {page.name}
-                </RouterLink>
-              </Button>
+              <RouterLink key={page.name} to={page.path} style={{ textDecoration: 'none', color: 'white' }}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                    {page.name}
+                </Button>
+              </RouterLink>
             ))}
           </Box>
         </Toolbar>

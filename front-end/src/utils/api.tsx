@@ -30,3 +30,21 @@ export const setCurrentUser = async (f: Function) => {
 	else
 		f(null)
 }
+
+export const updateUser = async (data: any) => {
+	const token = localStorage.getItem('__access_token__')
+	if (token === null) return null
+
+	const url = `${ApiProfile}/profile`
+	const headers = {
+		authorization: `Bearer ${token}`,
+		"Content-Type": "application/json",
+	}
+	const res = await fetch(url, {
+		method: 'post',
+		headers,
+		body: JSON.stringify(data)
+	})
+
+	return await res.json()
+}

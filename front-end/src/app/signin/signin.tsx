@@ -1,4 +1,6 @@
 import * as React from 'react';
+import {useContext, useEffect, useState} from "react";
+import {useNavigate, Link as RouterLink} from "react-router-dom";
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -7,17 +9,16 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {AlertColor} from "@mui/material/Alert";
 
 import {ApiAuth} from "../../global/global";
-import {useContext, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import {AlertContext, UserContext} from "../../utils/context";
 import {getCurrentUser} from "../../utils/api";
 import {TransitionAlert as Alert} from "../../components/alert";
+import {FortyTwoIcon} from "../../components/logo";
 
 
 // function: authenticate
@@ -29,7 +30,7 @@ const auth = async (data: any, f: Function) => {
     headers: { "Content-Type": "application/json" }
   })
 
-  if (res.status != 200) return false
+  if (res.status !== 200) return null
   else {
     const data = await res.json()
 
@@ -60,11 +61,18 @@ const theme = createTheme();
 
 // component: sign in (main)
 const SignIn = () => {
+  // context
   const { setUser } = useContext(UserContext)
   const { alert, setAlert } = useContext(AlertContext)
+
+  // state
   const [open, setOpen] = useState(false)
+  const [type, setType] = useState<AlertColor>('error')
+
+  // navigate
   const navigate = useNavigate()
 
+  // sign in handle submit event
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -75,9 +83,9 @@ const SignIn = () => {
     }
 
     const user = await auth(identity, setUser)
-
-    if (user === null) {
+    if (user === null || user === false) {
       setOpen(true)
+      setType('error')
       setAlert('Username or Password invalid')
     }
     else {
@@ -86,9 +94,20 @@ const SignIn = () => {
     }
   };
 
+  // initialize alert msg if exist
+  useEffect(() => {
+    const include = ['success', 'logged out']
+
+    if (alert && include.some(element => alert.includes(element))) {
+      setOpen(true)
+      setType('success')
+    }
+  }, [])
+
+  // component content
   return (
     <ThemeProvider theme={theme}>
-      <Alert type='error' msg={alert} open={open} f={setOpen} />
+      <Alert type={type} msg={alert} open={open} f={setOpen} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -99,8 +118,8 @@ const SignIn = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: '#9fa8a3' }}>
+            <FortyTwoIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
@@ -110,7 +129,7 @@ const SignIn = () => {
               margin="normal"
               required
               fullWidth
-              id="email"
+              id="username"
               label="Username"
               name="username"
               autoComplete="username"
@@ -130,7 +149,13 @@ const SignIn = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                bgcolor: '#9fa8a3',
+                opacity: '0.8',
+                '&:hover': { bgcolor: '#9fa8a3', opacity: '1' }
+              }}
             >
               Sign In
             </Button>
@@ -141,9 +166,9 @@ const SignIn = () => {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <RouterLink to="/signup" style={{ color: '#1976d2', textDecoration: 'none' }}>
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </RouterLink>
               </Grid>
             </Grid>
           </Box>

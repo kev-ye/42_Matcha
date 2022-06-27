@@ -1,4 +1,7 @@
 import * as React from 'react';
+import {useContext, useState} from "react";
+import {useNavigate, Link as RouterLink} from "react-router-dom";
+
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -6,13 +9,14 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import {ApiAuth} from "../../global/global";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {TransitionAlert as Alert} from "../../components/alert";
+import {AlertContext} from "../../utils/context";
+import {FortyTwoIcon} from "../../components/logo";
 
 // function: subscription
 const subscription = async (data: any) => {
@@ -47,7 +51,7 @@ const theme = createTheme();
 const SignUp = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  const [msg, setMsg] = useState('Invalid input!')
+  const { alert, setAlert } = useContext(AlertContext)
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -61,16 +65,20 @@ const SignUp = () => {
       password: data.get('password'),
     }
 
-    const msg = await subscription(identity)
-    if (msg) {
+    const res = await subscription(identity)
+    if (res) {
       setOpen(true)
-      setMsg(msg.msg)
+      setAlert(res.msg)
     }
-    else navigate('/signin')
+    else {
+      setAlert(`Subscription success for ${identity.username}`)
+      navigate('/signin')
+    }
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <Alert type='error' msg={alert} open={open} f={setOpen} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -81,8 +89,8 @@ const SignUp = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: '#9fa8a3' }}>
+            <FortyTwoIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
@@ -146,15 +154,21 @@ const SignUp = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                bgcolor: '#9fa8a3',
+                opacity: '0.8',
+                '&:hover': { bgcolor: '#9fa8a3', opacity: '1' }
+              }}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <RouterLink to="signin" style={{ color: '#1976d2', textDecoration: 'none' }}>
                   Already have an account? Sign in
-                </Link>
+                </RouterLink>
               </Grid>
             </Grid>
           </Box>

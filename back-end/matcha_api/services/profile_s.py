@@ -48,7 +48,7 @@ def get_user_info_params(param):
 # post: update user info
 def update_user_info():
 	identity, data = _common_data()
-	response = msg_response('invalid user', 400)
+	response = msg_response('invalid data', 400)
 	key_filter = ['id', 'username']
 
 	for key in key_filter:

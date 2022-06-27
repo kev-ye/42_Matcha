@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import {UserContext} from "../../utils/context";
-import NavLoggedOut from "./components/navLoggedOut";
-import NavLoggedIn from "./components/navLoggedIn";
+import NavLoggedOut from "./navLoggedOut";
+import NavLoggedIn from "./navLoggedIn";
 
 const ToolBar = () => {
 	const { user } = React.useContext(UserContext)
