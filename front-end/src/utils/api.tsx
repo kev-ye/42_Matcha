@@ -2,7 +2,10 @@ import {ApiProfile} from "../global/global";
 
 export const getCurrentUser = async () => {
 	const token = localStorage.getItem('__access_token__')
-	if (token === null) return null
+	if (token === null) {
+		document.location.href = '/login'
+		return null
+	}
 
 	const url = `${ApiProfile}/profile`
 	const headers = {authorization: `Bearer ${token}`}
@@ -33,7 +36,12 @@ export const setCurrentUser = async (f: Function) => {
 
 export const updateUser = async (data: any) => {
 	const token = localStorage.getItem('__access_token__')
-	if (token === null) return null
+	if (token === null) {
+		document.location.href = '/login'
+		return null
+	}
+
+	console.log(data)
 
 	const url = `${ApiProfile}/profile`
 	const headers = {
@@ -45,6 +53,8 @@ export const updateUser = async (data: any) => {
 		headers,
 		body: JSON.stringify(data)
 	})
+
+	if (res.status !== 200) return null
 
 	return await res.json()
 }
